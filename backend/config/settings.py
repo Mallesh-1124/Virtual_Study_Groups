@@ -35,6 +35,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -64,6 +65,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 ASGI_APPLICATION = 'config.asgi.application'
 
+import dj_database_url
+
 # Database Settings
 DATABASES = {
     'default': {
@@ -75,6 +78,10 @@ DATABASES = {
         'PORT': os.getenv('DB_PORT', '3306'),
     }
 }
+
+# Use DATABASE_URL if available (for Railway, Heroku, etc.)
+if os.getenv('DATABASE_URL'):
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=False)
 
 # If running on Google Cloud (Cloud Run), use the unix socket for Cloud SQL
 if os.getenv('K_SERVICE'):
@@ -96,6 +103,8 @@ USE_TZ = True
 
 # Static files
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
