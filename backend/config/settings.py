@@ -71,28 +71,31 @@ import dj_database_url
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('DB_NAME', 'virtual_study_group'),
-        'USER': os.getenv('DB_USER', 'root'),
-        'PASSWORD': os.getenv('DB_PASSWORD', ''),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '3306'),
+        'NAME': os.getenv('DB_NAME', os.getenv('MYSQLDATABASE', 'virtual_study_group')),
+        'USER': os.getenv('DB_USER', os.getenv('MYSQLUSER', 'root')),
+        'PASSWORD': os.getenv('DB_PASSWORD', os.getenv('MYSQLPASSWORD', '')),
+        'HOST': os.getenv('DB_HOST', os.getenv('MYSQLHOST', 'localhost')),
+        'PORT': os.getenv('DB_PORT', os.getenv('MYSQLPORT', '3306')),
     }
 }
 
-# Use DATABASE_URL if available (Priority for Railway/Production)
-if os.getenv('DATABASE_URL'):
+# Priority 1: Use DATABASE_URL or MYSQL_URL if available
+db_url = os.getenv('DATABASE_URL') or os.getenv('MYSQL_URL')
+if db_url:
     # Replace mysql:// with mysqlclient:// to ensure dj-database-url uses the correct engine
-    db_url = os.getenv('DATABASE_URL')
     if db_url.startswith('mysql://'):
         db_url = db_url.replace('mysql://', 'mysqlclient://', 1)
     
     DATABASES['default'] = dj_database_url.parse(db_url)
     DATABASES['default']['CONN_MAX_AGE'] = 600
 
-# If running on Google Cloud (Cloud Run), use the unix socket for Cloud SQL
+# Priority 2: If running on Google Cloud (Cloud Run), use the unix socket
 elif os.getenv('K_SERVICE'):
     DATABASES['default']['HOST'] = f"/cloudsql/{os.getenv('DB_HOST')}"
     DATABASES['default'].pop('PORT', None)
+
+# Debug: Print the host being used (helps troubleshooting)
+print(f"Connecting to database at: {DATABASES['default'].get('HOST')}")
 
 
 # Password validation
