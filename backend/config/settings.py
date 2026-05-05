@@ -79,14 +79,19 @@ DATABASES = {
     }
 }
 
-# Use DATABASE_URL if available (for Railway, Heroku, etc.)
+# Use DATABASE_URL if available (Priority for Railway/Production)
 if os.getenv('DATABASE_URL'):
-    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=False)
+    # Replace mysql:// with mysqlclient:// to ensure dj-database-url uses the correct engine
+    db_url = os.getenv('DATABASE_URL')
+    if db_url.startswith('mysql://'):
+        db_url = db_url.replace('mysql://', 'mysqlclient://', 1)
+    
+    DATABASES['default'] = dj_database_url.parse(db_url)
+    DATABASES['default']['CONN_MAX_AGE'] = 600
 
 # If running on Google Cloud (Cloud Run), use the unix socket for Cloud SQL
-if os.getenv('K_SERVICE'):
+elif os.getenv('K_SERVICE'):
     DATABASES['default']['HOST'] = f"/cloudsql/{os.getenv('DB_HOST')}"
-    # Remove port for unix socket
     DATABASES['default'].pop('PORT', None)
 
 
