@@ -72,9 +72,7 @@ import dj_database_url
 db_url = os.getenv('DATABASE_URL') or os.getenv('MYSQL_URL')
 
 if db_url:
-    # Replace mysql:// with mysqlclient:// so dj-database-url uses the correct Django engine
-    if db_url.startswith('mysql://'):
-        db_url = db_url.replace('mysql://', 'mysqlclient://', 1)
+    # dj-database-url natively supports mysql:// scheme — no rewriting needed
     
     DATABASES = {
         'default': dj_database_url.parse(db_url)
