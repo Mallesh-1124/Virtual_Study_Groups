@@ -141,8 +141,12 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# CORS — allow frontend
-CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:3000,http://127.0.0.1:3000').split(',')
+# CORS — allow frontend origins
+_cors_origins = os.getenv(
+    'CORS_ALLOWED_ORIGINS',
+    'http://localhost:3000,http://127.0.0.1:3000'
+).split(',')
+CORS_ALLOWED_ORIGINS = [o.strip() for o in _cors_origins if o.strip()]
 CORS_ALLOW_CREDENTIALS = True
 
 # Django REST Framework
@@ -162,10 +166,21 @@ CHANNEL_LAYERS = {
     },
 }
 
-# Session settings for cross-origin
-SESSION_COOKIE_SAMESITE = 'Lax'
-CSRF_COOKIE_SAMESITE = 'Lax'
-CSRF_TRUSTED_ORIGINS = [
+# Session & CSRF cookie settings
+# In production (cross-origin), cookies need SameSite=None + Secure
+_is_production = not DEBUG
+if _is_production:
+    SESSION_COOKIE_SAMESITE = 'None'
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SAMESITE = 'None'
+    CSRF_COOKIE_SECURE = True
+else:
+    SESSION_COOKIE_SAMESITE = 'Lax'
+    CSRF_COOKIE_SAMESITE = 'Lax'
+
+# CSRF trusted origins — include all CORS origins + any extras
+CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS + [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
 ]
+
