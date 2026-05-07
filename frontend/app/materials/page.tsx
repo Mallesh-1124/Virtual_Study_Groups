@@ -232,7 +232,7 @@ export default function MaterialsPage() {
             <Button variant="outline" onClick={() => setIsUploadOpen(true)}>Be the first to upload</Button>
           </div>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {filteredMaterials.map((material) => (
               <Card key={material.id} className="border-border bg-card flex flex-col hover:border-primary/50 transition-colors">
                 <CardHeader className="pb-3">

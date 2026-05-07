@@ -1,11 +1,20 @@
 "use client"
 
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { BookOpen, Menu, X } from "lucide-react"
 import { useState, useEffect } from "react"
-import { useAuth } from '@/context/auth-context'
+import { BookOpen, Menu, X, LogOut, User } from "lucide-react"
+import { useAuth } from "@/context/auth-context"
+import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -59,14 +68,36 @@ export function Navbar() {
           <ModeToggle />
           {mounted ? (
             user ? (
-              <>
-                <span className="rounded-full border border-border bg-muted px-3 py-2 text-sm font-medium text-foreground">
-                  {user.username}
-                </span>
-                <Button variant="ghost" size="sm" onClick={logout}>
-                  Sign out
-                </Button>
-              </>
+              <div className="flex items-center gap-2 sm:gap-4">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+                      <Avatar className="h-9 w-9">
+                        <AvatarFallback className="bg-primary/10 text-primary">
+                          {user.username.substring(0, 2).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56" align="end" forceMount>
+                    <DropdownMenuLabel className="font-normal">
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">{user.username}</p>
+                        <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/profile" className="cursor-pointer flex items-center gap-2">
+                        <User className="h-4 w-4" /> Profile
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={logout} className="cursor-pointer text-destructive focus:text-destructive flex items-center gap-2">
+                      <LogOut className="h-4 w-4" /> Sign out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             ) : (
               <>
                 <Link href="/login">

@@ -549,27 +549,27 @@ export default function RoomPage() {
   return (
     <div className="h-screen bg-background flex flex-col overflow-hidden">
       {/* Header */}
-      <header className="flex items-center justify-between border-b border-border bg-card px-4 py-3">
-        <div className="flex items-center gap-3">
+      <header className="flex items-center justify-between border-b border-border bg-card px-3 py-2 sm:px-4 sm:py-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <Link href="/admin" className="text-muted-foreground hover:text-foreground">
-            <ArrowLeft className="h-5 w-5" />
+            <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
           </Link>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="font-semibold text-foreground">{room?.name}</h1>
-              <Badge className="bg-red-500 text-white text-xs">LIVE</Badge>
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <h1 className="font-semibold text-sm sm:text-base text-foreground truncate max-w-[120px] sm:max-w-none">{room?.name}</h1>
+              <Badge className="bg-red-500 text-white text-[10px]">LIVE</Badge>
             </div>
-            <p className="text-xs text-muted-foreground">{room?.subject}</p>
+            <p className="text-[10px] text-muted-foreground truncate">{room?.subject}</p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
-          <Badge variant="outline" className="gap-1 text-xs">
-            <Sparkles className="h-3 w-3 text-amber-500" />
-            Gemini AI
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Badge variant="outline" className="hidden xs:flex gap-1 text-[10px]">
+            <Sparkles className="h-2.5 w-2.5 text-amber-500" />
+            Gemini
           </Badge>
-          <div className="flex items-center gap-1">
-            <Users className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">{onlineCount} online</span>
+          <div className="flex items-center gap-1 shrink-0">
+            <Users className="h-3.5 w-3.5 text-muted-foreground" />
+            <span className="text-xs text-muted-foreground">{onlineCount}</span>
           </div>
         </div>
       </header>
@@ -577,10 +577,10 @@ export default function RoomPage() {
       {/* Main content */}
       <div className="flex-1 grid lg:grid-cols-3 overflow-hidden">
         {/* Video area */}
-        <div className="lg:col-span-2 flex flex-col p-4 overflow-hidden border-r border-border">
-          <div className="grid grid-cols-2 gap-3 flex-1">
+        <div className="lg:col-span-2 flex flex-col p-3 sm:p-4 overflow-hidden border-b lg:border-b-0 lg:border-r border-border">
+          <div className="grid grid-cols-2 gap-2 sm:gap-3 flex-1 min-h-[300px]">
             {/* Local video */}
-            <div className="relative rounded-lg bg-muted overflow-hidden flex items-center justify-center">
+            <div className="relative rounded-lg bg-muted overflow-hidden flex items-center justify-center border border-border shadow-sm">
               <video
                 ref={videoRef}
                 autoPlay
@@ -589,13 +589,13 @@ export default function RoomPage() {
                 className={`w-full h-full object-cover ${!videoOn ? 'hidden' : ''}`}
               />
               {!videoOn && (
-                <Avatar className="h-16 w-16">
-                  <AvatarFallback className="bg-primary text-primary-foreground text-lg">
+                <Avatar className="h-12 w-12 sm:h-16 sm:w-16">
+                  <AvatarFallback className="bg-primary text-primary-foreground text-base sm:text-lg">
                     {user?.username?.substring(0, 2).toUpperCase() || "ME"}
                   </AvatarFallback>
                 </Avatar>
               )}
-              <div className="absolute bottom-2 left-2 rounded bg-background/80 px-2 py-0.5 text-xs font-medium text-foreground">
+              <div className="absolute bottom-2 left-2 rounded bg-background/80 px-1.5 py-0.5 text-[10px] font-medium text-foreground max-w-[80%] truncate">
                 You ({user?.username})
               </div>
             </div>

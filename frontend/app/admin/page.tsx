@@ -112,22 +112,22 @@ export default function AdminPage() {
     <div className="min-h-screen bg-background">
       <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         {/* Page title */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
-          <p className="mt-1 text-muted-foreground">Manage your study rooms and view platform statistics.</p>
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Dashboard</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Manage your study rooms and view platform statistics.</p>
         </div>
 
         {/* Stats */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+        <div className="grid gap-4 grid-cols-2 lg:grid-cols-4 mb-8">
           {statCards.map((stat) => (
             <Card key={stat.label} className="border-border bg-card">
-              <CardContent className="p-5">
+              <CardContent className="p-3 sm:p-5">
                 <div className="flex items-center justify-between">
-                  <stat.icon className={`h-5 w-5 ${stat.color}`} />
-                  <BarChart3 className="h-4 w-4 text-muted-foreground" />
+                  <stat.icon className={`h-4 w-4 sm:h-5 sm:w-5 ${stat.color}`} />
+                  <BarChart3 className="hidden sm:block h-4 w-4 text-muted-foreground" />
                 </div>
-                <p className="mt-3 text-3xl font-bold text-foreground">{stat.value}</p>
-                <p className="text-sm text-muted-foreground">{stat.label}</p>
+                <p className="mt-2 sm:mt-3 text-xl sm:text-3xl font-bold text-foreground">{stat.value}</p>
+                <p className="text-[10px] sm:text-sm text-muted-foreground">{stat.label}</p>
               </CardContent>
             </Card>
           ))}
@@ -204,38 +204,38 @@ export default function AdminPage() {
               </CardContent>
             </Card>
           ) : (
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {rooms.map((room) => (
                 <Card key={room.id} className="border-border bg-card hover:border-primary/30 transition-colors">
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between mb-2">
-                      <div>
-                        <h3 className="font-semibold text-foreground">{room.name}</h3>
+                      <div className="min-w-0 flex-1 mr-2">
+                        <h3 className="font-semibold text-foreground truncate">{room.name}</h3>
                         {room.subject && (
-                          <Badge variant="secondary" className="text-xs mt-1">{room.subject}</Badge>
+                          <Badge variant="secondary" className="text-[10px] mt-1 truncate max-w-full">{room.subject}</Badge>
                         )}
                       </div>
-                      <Badge className="bg-green-500/10 text-green-600 text-xs">Active</Badge>
+                      <Badge className="bg-green-500/10 text-green-600 text-[10px] shrink-0">Active</Badge>
                     </div>
                     {room.description && (
-                      <p className="text-xs text-muted-foreground mt-2 line-clamp-2">{room.description}</p>
+                      <p className="text-xs text-muted-foreground mt-2 line-clamp-2 min-h-[2.5rem]">{room.description}</p>
                     )}
                     <div className="flex items-center justify-between mt-4">
-                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                      <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
                         <Users className="h-3 w-3" />
-                        {room.member_count} members
+                        {room.member_count}
                       </div>
                       <div className="flex items-center gap-1">
                         <Button
                           size="sm"
                           variant="ghost"
-                          className="h-7 text-xs text-destructive hover:text-destructive"
+                          className="h-8 w-8 p-0 text-destructive hover:text-destructive"
                           onClick={() => handleDeleteRoom(room.id)}
                         >
-                          <Trash2 className="h-3 w-3" />
+                          <Trash2 className="h-4 w-4" />
                         </Button>
                         <Link href={`/room/${room.id}`}>
-                          <Button size="sm" className="h-7 text-xs gap-1">
+                          <Button size="sm" className="h-8 text-xs gap-1 px-3">
                             Join <ArrowRight className="h-3 w-3" />
                           </Button>
                         </Link>
