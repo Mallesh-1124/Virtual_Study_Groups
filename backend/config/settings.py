@@ -168,15 +168,10 @@ CHANNEL_LAYERS = {
 
 # Session & CSRF cookie settings
 # In production (cross-origin), cookies need SameSite=None + Secure
-_is_production = not DEBUG
-if _is_production:
-    SESSION_COOKIE_SAMESITE = 'None'
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SAMESITE = 'None'
-    CSRF_COOKIE_SECURE = True
-else:
-    SESSION_COOKIE_SAMESITE = 'Lax'
-    CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SECURE = True
 
 # CSRF trusted origins — include all CORS origins + any extras
 CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS + [
