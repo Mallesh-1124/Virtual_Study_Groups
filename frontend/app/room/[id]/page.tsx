@@ -752,14 +752,19 @@ export default function RoomPage() {
                   <span className="text-xs font-medium text-primary">Ask AI Teacher (Gemini)</span>
                 </div>
                 <div className="flex gap-2">
-                  <Input
-                    placeholder="Ask the AI teacher..."
-                    className="flex-1 h-9 text-sm bg-background/50"
-                    value={aiQuestion}
-                    onChange={(e) => setAiQuestion(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && !aiLoading && handleAskAI()}
-                    disabled={aiLoading}
-                  />
+                    <Input
+                      placeholder="Ask the AI teacher..."
+                      className="flex-1 h-9 text-sm bg-background/50"
+                      value={aiQuestion}
+                      onChange={(e) => setAiQuestion(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && !aiLoading) {
+                          e.preventDefault();
+                          handleAskAI();
+                        }
+                      }}
+                      disabled={aiLoading}
+                    />
                   <Button size="icon" className="h-9 w-9 shadow-md" onClick={handleAskAI} disabled={aiLoading || !aiQuestion.trim()}>
                     {aiLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Bot className="h-4 w-4" />}
                   </Button>
@@ -769,13 +774,18 @@ export default function RoomPage() {
               {/* Chat input */}
               <div className="border-t border-border p-3 shrink-0 bg-background/50">
                 <div className="flex gap-2">
-                  <Input
-                    placeholder="Type a message..."
-                    className="flex-1 h-9 text-sm bg-background/50"
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                  />
+                    <Input
+                      placeholder="Type a message..."
+                      className="flex-1 h-9 text-sm bg-background/50"
+                      value={newMessage}
+                      onChange={(e) => setNewMessage(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          sendMessage();
+                        }
+                      }}
+                    />
                   <Button size="icon" className="h-9 w-9 shadow-md" onClick={sendMessage}>
                     <Send className="h-4 w-4" />
                   </Button>
