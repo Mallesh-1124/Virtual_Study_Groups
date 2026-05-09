@@ -21,7 +21,7 @@ def get_model():
     if _model is None:
         import google.generativeai as genai
         genai.configure(api_key=GEMINI_API_KEY)
-        _model = genai.GenerativeModel('gemini-2.0-flash')
+        _model = genai.GenerativeModel('gemini-2.5-flash')
     return _model
 
 
