@@ -664,7 +664,7 @@ export default function RoomPage() {
         </div>
 
         {/* Sidebar with tabs */}
-        <div className="flex flex-col overflow-hidden">
+        <div className="flex flex-col overflow-hidden h-full min-h-0 bg-card/30 backdrop-blur-sm">
           {/* Tab buttons */}
           <div className="flex border-b border-border">
             {[
@@ -690,7 +690,7 @@ export default function RoomPage() {
 
           {/* ─── Chat Tab ─── */}
           {activeTab === "chat" && (
-            <>
+            <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
               <ScrollArea className="flex-1 px-4 py-2">
                 <div className="space-y-4 pt-2">
                   {messages.map((msg) => {
@@ -734,7 +734,7 @@ export default function RoomPage() {
               </ScrollArea>
 
               {/* AI Ask section */}
-              <div className="border-t border-border p-3 bg-gradient-to-r from-primary/5 to-amber-500/5">
+              <div className="border-t border-border p-3 bg-gradient-to-r from-primary/5 to-amber-500/5 shrink-0">
                 <div className="flex items-center gap-2 mb-2">
                   <Sparkles className="h-3 w-3 text-amber-500" />
                   <span className="text-xs font-medium text-primary">Ask AI Teacher (Gemini)</span>
@@ -742,34 +742,34 @@ export default function RoomPage() {
                 <div className="flex gap-2">
                   <Input
                     placeholder="Ask the AI teacher..."
-                    className="flex-1 h-9 text-sm"
+                    className="flex-1 h-9 text-sm bg-background/50"
                     value={aiQuestion}
                     onChange={(e) => setAiQuestion(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && !aiLoading && handleAskAI()}
                     disabled={aiLoading}
                   />
-                  <Button size="icon" className="h-9 w-9" onClick={handleAskAI} disabled={aiLoading || !aiQuestion.trim()}>
+                  <Button size="icon" className="h-9 w-9 shadow-md" onClick={handleAskAI} disabled={aiLoading || !aiQuestion.trim()}>
                     {aiLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Bot className="h-4 w-4" />}
                   </Button>
                 </div>
               </div>
 
               {/* Chat input */}
-              <div className="border-t border-border p-3">
+              <div className="border-t border-border p-3 shrink-0 bg-background/50">
                 <div className="flex gap-2">
                   <Input
                     placeholder="Type a message..."
-                    className="flex-1 h-9 text-sm"
+                    className="flex-1 h-9 text-sm bg-background/50"
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                   />
-                  <Button size="icon" className="h-9 w-9" onClick={sendMessage}>
+                  <Button size="icon" className="h-9 w-9 shadow-md" onClick={sendMessage}>
                     <Send className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
-            </>
+            </div>
           )}
 
           {/* ─── Summary Tab ─── */}
