@@ -23,11 +23,10 @@ export default function ProfilePage() {
   const [bio, setBio] = useState('')
   const [preferredSubjects, setPreferredSubjects] = useState('')
   const [learningGoal, setLearningGoal] = useState('')
-  const [timezone, setTimezone] = useState('UTC')
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push('/login')
+      router.push('/')
     }
   }, [authLoading, user, router])
 
@@ -46,7 +45,6 @@ export default function ProfilePage() {
         setBio(profileData.bio)
         setPreferredSubjects(profileData.preferred_subjects)
         setLearningGoal(profileData.learning_goal)
-        setTimezone(profileData.timezone)
       } catch (err: any) {
         if (err?.status === 401) {
           router.push('/login')
@@ -71,7 +69,6 @@ export default function ProfilePage() {
         bio,
         preferred_subjects: preferredSubjects,
         learning_goal: learningGoal,
-        timezone,
       })
       setProfile(updatedProfile)
     } catch (err: any) {
@@ -156,16 +153,6 @@ export default function ProfilePage() {
                       placeholder="Ace this semester with structured sessions"
                     />
                   </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="timezone">Timezone</Label>
-                  <Input
-                    id="timezone"
-                    value={timezone}
-                    onChange={(event) => setTimezone(event.target.value)}
-                    placeholder="UTC"
-                  />
                 </div>
 
                 {error && <p className="text-sm text-destructive">{error}</p>}

@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Label } from "@/components/ui/label"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Loader2, CalendarDays, Clock4, Users, MapPin, Plus } from "lucide-react"
+import { Loader2, CalendarDays, Clock4, Users, MapPin, Plus, Share2 } from "lucide-react"
 import { useAuth } from "@/context/auth-context"
 import { getSchedules, createSchedule, rsvpSchedule, type StudySchedule } from "@/lib/api"
 
@@ -30,7 +30,7 @@ export default function SchedulePage() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push("/login")
+      router.push("/")
     }
   }, [authLoading, user, router])
 
@@ -254,17 +254,26 @@ export default function SchedulePage() {
                                   <span className="inline-flex items-center gap-1"><Users className="h-3.5 w-3.5" /> {attendingCount} attending</span>
                                 </div>
                               </div>
-                              <div className="flex flex-col items-start gap-2 sm:items-end">
-                                <div className="text-xs text-muted-foreground">Organized by {schedule.organizer.username}</div>
-                                <Badge variant={schedule.is_cancelled ? 'destructive' : isAttending ? 'secondary' : 'outline'} className="text-xs">
-                                  {schedule.is_cancelled ? 'Cancelled' : isAttending ? 'Going' : 'Open'}
-                                </Badge>
-                                {!schedule.is_cancelled && !isAttending && (
-                                  <Button size="sm" onClick={() => handleRsvp(schedule.id)}>
-                                    RSVP
-                                  </Button>
-                                )}
-                              </div>
+                                <div className="flex flex-col items-start gap-2 sm:items-end">
+                                  <div className="text-xs text-muted-foreground">Organized by {schedule.organizer.username}</div>
+                                  <Badge variant={schedule.is_cancelled ? 'destructive' : isAttending ? 'secondary' : 'outline'} className="text-xs">
+                                    {schedule.is_cancelled ? 'Cancelled' : isAttending ? 'Going' : 'Open'}
+                                  </Badge>
+                                  <div className="flex gap-2">
+                                    <Button size="sm" variant="outline" onClick={() => {
+                                      const url = schedule.room ? `${window.location.origin}/room/${schedule.room}` : window.location.href;
+                                      navigator.clipboard.writeText(url);
+                                      alert("Meeting link copied to clipboard!");
+                                    }}>
+                                      <Share2 className="h-4 w-4 mr-1" /> Share
+                                    </Button>
+                                    {!schedule.is_cancelled && !isAttending && (
+                                      <Button size="sm" onClick={() => handleRsvp(schedule.id)}>
+                                        RSVP
+                                      </Button>
+                                    )}
+                                  </div>
+                                </div>
                             </div>
                           </Card>
                         )

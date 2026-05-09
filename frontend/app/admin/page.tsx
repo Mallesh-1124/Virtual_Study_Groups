@@ -42,8 +42,8 @@ export default function AdminPage() {
       setStats(statsData)
       setRooms(roomsData)
     } catch (err: any) {
-      if (err?.status === 401) {
-        router.push("/login")
+      if (err?.status === 401 || err?.status === 403) {
+        router.push("/")
         return
       }
     } finally {

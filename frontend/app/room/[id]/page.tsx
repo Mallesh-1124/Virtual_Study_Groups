@@ -153,8 +153,8 @@ export default function RoomPage() {
         setParticipants(addCurrentUserToParticipants(userData, roomData.members || []))
         await joinRoom(roomId)
       } catch (err: any) {
-        if (err?.status === 401) {
-          router.push("/login")
+        if (err?.status === 401 || err?.status === 403) {
+          router.push("/")
           return
         }
         setError("Failed to load room. Please try again.")

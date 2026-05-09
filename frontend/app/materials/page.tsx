@@ -49,7 +49,7 @@ export default function MaterialsPage() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push("/login")
+      router.push("/")
     }
   }, [authLoading, user, router])
 

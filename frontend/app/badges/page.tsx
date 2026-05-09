@@ -19,7 +19,7 @@ export default function BadgesPage() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push("/login")
+      router.push("/")
     }
   }, [authLoading, user, router])
 
