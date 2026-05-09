@@ -549,27 +549,35 @@ export default function RoomPage() {
   return (
     <div className="h-screen bg-background flex flex-col overflow-hidden">
       {/* Header */}
-      <header className="flex items-center justify-between border-b border-border bg-card px-3 py-2 sm:px-4 sm:py-3">
-        <div className="flex items-center gap-2 sm:gap-3">
-          <Link href="/admin" className="text-muted-foreground hover:text-foreground">
-            <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
+      <header className="flex items-center justify-between border-b border-border/50 bg-card/80 backdrop-blur-md px-4 py-3 sticky top-0 z-50">
+        <div className="flex items-center gap-4">
+          <Link href="/admin" className="text-muted-foreground hover:text-primary transition-colors">
+            <ArrowLeft className="h-5 w-5" />
           </Link>
           <div className="min-w-0">
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              <h1 className="font-semibold text-sm sm:text-base text-foreground truncate max-w-[120px] sm:max-w-none">{room?.name}</h1>
-              <Badge className="bg-red-500 text-white text-[10px]">LIVE</Badge>
+            <div className="flex items-center gap-2">
+              <h1 className="font-bold text-base sm:text-lg text-foreground tracking-tight truncate max-w-[150px] sm:max-w-none">
+                {room?.name}
+              </h1>
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+              </span>
+              <Badge variant="secondary" className="bg-red-500/10 text-red-500 hover:bg-red-500/20 border-red-500/20 text-[10px] font-bold">
+                LIVE
+              </Badge>
             </div>
-            <p className="text-[10px] text-muted-foreground truncate">{room?.subject}</p>
+            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{room?.subject}</p>
           </div>
         </div>
-        <div className="flex items-center gap-2 sm:gap-3">
-          <Badge variant="outline" className="hidden xs:flex gap-1 text-[10px]">
-            <Sparkles className="h-2.5 w-2.5 text-amber-500" />
-            Gemini
-          </Badge>
-          <div className="flex items-center gap-1 shrink-0">
-            <Users className="h-3.5 w-3.5 text-muted-foreground" />
-            <span className="text-xs text-muted-foreground">{onlineCount}</span>
+        <div className="flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 border border-primary/10">
+            <Sparkles className="h-3.5 w-3.5 text-amber-500 animate-pulse" />
+            <span className="text-[10px] font-bold text-primary tracking-wide">GEMINI 2.5 FLASH</span>
+          </div>
+          <div className="flex items-center gap-1.5 bg-muted/50 px-2 py-1 rounded-md">
+            <Users className="h-4 w-4 text-primary" />
+            <span className="text-xs font-bold">{onlineCount}</span>
           </div>
         </div>
       </header>
@@ -629,18 +637,28 @@ export default function RoomPage() {
           </div>
 
           {/* Media controls */}
-          <div className="py-2 sm:mt-4 flex items-center justify-center gap-2 sm:gap-3 shrink-0">
-            <Button size="icon" variant={micOn ? "outline" : "destructive"} className="h-9 w-9 sm:h-11 sm:w-11 rounded-full" onClick={toggleMic}>
-              {micOn ? <Mic className="h-4 w-4" /> : <MicOff className="h-4 w-4" />}
+          <div className="py-4 flex items-center justify-center gap-4 shrink-0">
+            <Button 
+              size="icon" 
+              variant={micOn ? "secondary" : "destructive"} 
+              className={`h-12 w-12 rounded-full shadow-lg transition-all ${micOn ? 'hover:bg-primary/20 hover:text-primary' : ''}`} 
+              onClick={toggleMic}
+            >
+              {micOn ? <Mic className="h-5 w-5" /> : <MicOff className="h-5 w-5" />}
             </Button>
-            <Button size="icon" variant={videoOn ? "outline" : "destructive"} className="h-9 w-9 sm:h-11 sm:w-11 rounded-full" onClick={toggleVideo}>
-              {videoOn ? <Video className="h-4 w-4" /> : <VideoOff className="h-4 w-4" />}
+            <Button 
+              size="icon" 
+              variant={videoOn ? "secondary" : "destructive"} 
+              className={`h-12 w-12 rounded-full shadow-lg transition-all ${videoOn ? 'hover:bg-primary/20 hover:text-primary' : ''}`} 
+              onClick={toggleVideo}
+            >
+              {videoOn ? <Video className="h-5 w-5" /> : <VideoOff className="h-5 w-5" />}
             </Button>
-            <Button size="icon" variant="outline" className="h-9 w-9 sm:h-11 sm:w-11 rounded-full hidden xs:flex">
-              <MonitorUp className="h-4 w-4" />
+            <Button size="icon" variant="secondary" className="h-12 w-12 rounded-full shadow-lg hover:bg-primary/20 hover:text-primary hidden xs:flex">
+              <MonitorUp className="h-5 w-5" />
             </Button>
-            <Button size="icon" variant="destructive" className="h-9 w-9 sm:h-11 sm:w-11 rounded-full" onClick={handleLeave}>
-              <PhoneOff className="h-4 w-4" />
+            <Button size="icon" variant="destructive" className="h-12 w-12 rounded-full shadow-xl hover:scale-105 active:scale-95 transition-transform" onClick={handleLeave}>
+              <PhoneOff className="h-5 w-5" />
             </Button>
           </div>
         </div>
@@ -673,24 +691,44 @@ export default function RoomPage() {
           {/* ─── Chat Tab ─── */}
           {activeTab === "chat" && (
             <>
-              <ScrollArea className="flex-1 p-3">
-                <div className="space-y-3">
-                  {messages.map((msg) => (
-                    <div key={msg.id} className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        {msg.is_ai && <Bot className="h-3 w-3 text-primary" />}
-                        <span className={`text-xs font-medium ${msg.is_ai ? "text-primary" : "text-foreground"}`}>
-                          {msg.sender_name}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          {new Date(msg.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                        </span>
+              <ScrollArea className="flex-1 px-4 py-2">
+                <div className="space-y-4 pt-2">
+                  {messages.map((msg) => {
+                    const isSystem = msg.sender_name === "System"
+                    const isMe = msg.user?.id === user?.id
+                    
+                    if (isSystem) {
+                      return (
+                        <div key={msg.id} className="flex justify-center">
+                          <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 bg-muted/30 px-2 py-0.5 rounded">
+                            {msg.content}
+                          </span>
+                        </div>
+                      )
+                    }
+
+                    return (
+                      <div key={msg.id} className={`flex flex-col ${isMe ? "items-end" : "items-start"} space-y-1`}>
+                        <div className="flex items-center gap-2 px-1">
+                          {!isMe && msg.is_ai && <Sparkles className="h-3 w-3 text-amber-500" />}
+                          <span className={`text-[10px] font-bold uppercase tracking-tight ${msg.is_ai ? "text-amber-600" : "text-muted-foreground"}`}>
+                            {msg.sender_name}
+                          </span>
+                          <span className="text-[10px] text-muted-foreground/50">
+                            {new Date(msg.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                          </span>
+                        </div>
+                        <div className={`
+                          max-w-[85%] rounded-2xl px-3 py-2 text-sm shadow-sm
+                          ${isMe ? "bg-primary text-primary-foreground rounded-tr-none" : 
+                            msg.is_ai ? "bg-amber-500/10 border border-amber-500/20 text-foreground rounded-tl-none backdrop-blur-sm" : 
+                            "bg-muted/50 border border-border/50 text-foreground rounded-tl-none"}
+                        `}>
+                          {msg.content}
+                        </div>
                       </div>
-                      <p className={`text-sm whitespace-pre-wrap ${msg.is_ai ? "text-foreground bg-primary/5 rounded-lg px-3 py-2 border border-primary/20" : "text-muted-foreground"}`}>
-                        {msg.content}
-                      </p>
-                    </div>
-                  ))}
+                    )
+                  })}
                   <div ref={messagesEndRef} />
                 </div>
               </ScrollArea>
